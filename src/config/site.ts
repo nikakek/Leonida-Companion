@@ -8,6 +8,8 @@ export const siteConfig = {
     "An unofficial, mobile-first companion for your Leonida playthrough: cheat lookups, radio station song finder, map and deals. Fan-made, with every entry marked by verification status.",
   url,
   domain: new URL(url).host,
+  // TODO: replace with a real inbox before launch.
+  contactEmail: "contact@example.com",
   launchDate: "2026-11-19",
   launchLabel: "Nov 19, 2026",
   disclaimer:

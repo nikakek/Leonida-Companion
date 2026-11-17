@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { AdSlot } from "@/components/AdSlot";
 import { PageIntro } from "@/components/PageIntro";
 import { PlatformToggle } from "@/components/PlatformToggle";
 import { ButtonGuide } from "@/components/cheats/ButtonGuide";
@@ -25,6 +26,7 @@ export default function CheatsPage() {
       </div>
       <CheatsBrowser />
       <ButtonGuide />
+      <AdSlot id="cheats-bottom" size="banner" />
     </>
   );
 }

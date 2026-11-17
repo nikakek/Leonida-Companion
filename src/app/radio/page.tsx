@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { AdSlot } from "@/components/AdSlot";
 import { PageIntro } from "@/components/PageIntro";
 import { RadioSearch } from "@/components/radio/RadioSearch";
 import { SampleNote } from "@/components/radio/SampleNote";
@@ -35,6 +36,7 @@ export default function RadioPage() {
         </ul>
         <p className="mt-6 text-[15px] text-muted">More stations are expected. This list will grow after launch.</p>
       </section>
+      <AdSlot id="radio-bottom" size="banner" />
     </>
   );
 }

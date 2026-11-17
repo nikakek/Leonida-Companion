@@ -1,8 +1,11 @@
 import type { Metadata, Viewport } from "next";
 import { Figtree, JetBrains_Mono } from "next/font/google";
+import { Analytics } from "@/components/Analytics";
 import { BottomNav } from "@/components/BottomNav";
+import { ConsentPlaceholder } from "@/components/ConsentPlaceholder";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
+import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
 import { siteConfig } from "@/config/site";
 import "./globals.css";
 
@@ -28,6 +31,7 @@ export const metadata: Metadata = {
   },
   description: siteConfig.description,
   applicationName: siteConfig.name,
+  appleWebApp: { capable: true, title: siteConfig.shortName, statusBarStyle: "black-translucent" },
   alternates: { canonical: "/" },
   openGraph: {
     type: "website",
@@ -64,6 +68,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         </main>
         <Footer />
         <BottomNav />
+        <ConsentPlaceholder />
+        <ServiceWorkerRegister />
+        <Analytics />
       </body>
     </html>
   );

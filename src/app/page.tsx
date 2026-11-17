@@ -35,7 +35,7 @@ const tabCards = [
     title: "Deals",
     accent: "#FF9A3C",
     blurb: "Gift cards, storage and controllers. Clearly labeled affiliate links.",
-    meta: "Coming soon",
+    meta: "Affiliate links, clearly labeled",
   },
 ];
 
