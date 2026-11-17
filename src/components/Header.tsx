@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { LogoMark } from "@/components/LogoMark";
 import { MenuDialog } from "@/components/MenuDialog";
+import { SubmitTrigger } from "@/components/submit/SubmitTrigger";
 
 export function Header() {
   return (
@@ -11,6 +12,7 @@ export function Header() {
           <span className="text-[17px] font-semibold tracking-[-0.01em]">Leonida Companion</span>
         </Link>
         <div className="flex items-center gap-3">
+          <SubmitTrigger className="btn-primary btn-sm hidden md:inline-flex">Submit a Discovery</SubmitTrigger>
           <MenuDialog />
         </div>
       </div>

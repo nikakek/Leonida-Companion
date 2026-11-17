@@ -7,6 +7,7 @@ import { QuickSearch } from "@/components/QuickSearch";
 import { SectionHeader } from "@/components/SectionHeader";
 import { StationCard } from "@/components/radio/StationCard";
 import { cheats } from "@/data/cheats";
+import { pins } from "@/data/pins";
 import { stations } from "@/data/radio";
 
 const trackCount = stations.reduce((total, station) => total + station.tracks.length, 0);
@@ -31,7 +32,7 @@ const tabCards = [
     title: "Map",
     accent: "#19B8FF",
     blurb: "A stylized map of Leonida with discoveries and progress tracking.",
-    meta: "Coming soon",
+    meta: `${pins.length} sample pins · track your finds`,
   },
   {
     href: "/deals",

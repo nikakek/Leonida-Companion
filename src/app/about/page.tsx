@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { PageIntro } from "@/components/PageIntro";
 import { StatusBadge } from "@/components/StatusBadge";
+import { SubmitTrigger } from "@/components/submit/SubmitTrigger";
 import { siteConfig } from "@/config/site";
 import { pageMetadata } from "@/lib/seo";
 
@@ -51,8 +51,8 @@ export default function AboutPage() {
           </li>
         </ul>
         <p className="mt-4 text-muted">
-          If something is unknown, we say &ldquo;Not verified yet&rdquo; instead of guessing. Spotted a mistake? See
-          the <Link href="/map#submit" className="text-link">submissions page</Link>.
+          If something is unknown, we say &ldquo;Not verified yet&rdquo; instead of guessing. Spotted a mistake?{" "}
+          <SubmitTrigger className="text-link">Submit a correction</SubmitTrigger>.
         </p>
       </section>
     </div>

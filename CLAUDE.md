@@ -26,7 +26,7 @@ Tailwind theme colors (globals.css `@theme`): `bg` #0B0A1C (+ one faint top radi
 - Section header: pink title left, white "View all →" (inline SVG arrow) right.
 - Card grid: 3/2/1 cols, gap 24px. Card = 16:9 `<Thumb>` on top (full-bleed), title, meta pinned to bottom (flex col, equal heights). Padding 32px desktop / 20px mobile. Hover/focus-visible: `card-hover` bg + translateY(-2px), 150ms.
 - `<Thumb accent seed />`: original SVG gradient mesh + abstract skyline/palm silhouette. No images.
-- Header: sticky, logo mark left, two-bar hamburger right → full-screen native `<dialog>` menu (4 tabs + About, Privacy, Affiliate Disclosure). Pink "Submit a Discovery" pill only once Phase 4 exists.
+- Header: sticky, logo mark left, two-bar hamburger right → full-screen native `<dialog>` menu (4 tabs + About, Privacy, Affiliate Disclosure). Pink "Submit a Discovery" pill (desktop) + floating "Submit" button (mobile) open the single `<SubmitDiscovery>` dialog via `OPEN_SUBMIT_EVENT` (`SubmitTrigger`).
 - Mobile (<768px): fixed bottom tab bar 64px + safe-area, rgba(11,10,28,0.9) + blur, 1px top border #2A2750; tabs Cheats/Radio/Map/Deals, 24px SVG icon + 11px label, ≥48px targets, active = accent. Content gets bottom padding.
 - Footer: disclaimer in outlined pill container (1px border, radius 999px desktop / 24px mobile), then links /about /privacy /affiliate-disclosure.
 - Buttons: `.btn-primary` (accent fill, dark text, 600, pill), `.btn-secondary` (transparent, 1px #3A3568, hover border accent).
@@ -45,3 +45,8 @@ Tailwind theme colors (globals.css `@theme`): `bg` #0B0A1C (+ one faint top radi
 - Next 15: `params` is a Promise. `generateStaticParams` + `dynamicParams = false` for `/cheats/[slug]`, `/radio/[station]`. Theme color in `export const viewport`.
 - Crawlable server-rendered text on every detail page.
 - Strict TS, no `any`, no unused code, no ESLint disables, zero build warnings.
+
+## 3. Map and submissions (Phase 4)
+- Map is dependency-free SVG (`src/components/map/*`, viewBox 0 0 800 1000). Zoom animates the viewBox with rAF (jump under reduced motion); pins/labels are scaled by map-units-per-px so they stay constant size. Pin shapes differ by category (not color-only); 44px hit targets.
+- `src/data/pins.ts`: all pins `status: "sample"` until verified.
+- `/api/submit`: hand-written validation shared with the client (`src/lib/submission.ts`), 8 KB cap, same-origin check, honeypot (silent 200), in-memory rate limit 5/10 min (use Redis/Upstash on serverless), webhook with 5s timeout. Submissions are never auto-published.

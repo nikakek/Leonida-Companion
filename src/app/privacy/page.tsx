@@ -20,10 +20,21 @@ export default function PrivacyPage() {
         <ul>
           <li>Your controller platform (PlayStation or Xbox).</li>
           <li>Your favorite cheats.</li>
-          <li>Map progress and your own submissions, once those features are available.</li>
+          <li>Pins you marked as found on the map.</li>
+          <li>A list of your own submissions (without contact details), so you can see what is pending review.</li>
         </ul>
         <p className="mt-2">
-          This data never leaves your device and is not sent to us. Clearing your browser&apos;s site data removes it.
+          This data stays on your device and is not sent to us. Clearing your browser&apos;s site data removes it.
+        </p>
+      </section>
+
+      <section>
+        <h2>Submissions</h2>
+        <p>
+          When you use &ldquo;Submit a Discovery&rdquo;, we receive what you type: title, region, category,
+          description and, only if you add it, a contact (email or handle). Your IP address is used briefly in memory
+          to limit spam and is not stored with the submission. Submissions are reviewed by hand and are never
+          published automatically. Ask us to delete a submission using the contact below.
         </p>
       </section>
 

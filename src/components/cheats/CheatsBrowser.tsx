@@ -7,6 +7,7 @@ import { EmptyState } from "@/components/EmptyState";
 import { SearchInput } from "@/components/SearchInput";
 import { StatusBadge } from "@/components/StatusBadge";
 import { FavoriteButton } from "@/components/cheats/FavoriteButton";
+import { SubmitTrigger } from "@/components/submit/SubmitTrigger";
 import {
   categoryAccents,
   cheatCategories,
@@ -97,7 +98,10 @@ export function CheatsBrowser() {
 
       <div id={RESULTS_ID} className="mt-8">
         {results.length === 0 ? (
-          <EmptyState message="No matches. Know a code? Submit it." ctaLabel="Submit a Code" ctaHref="/map#submit" />
+          <EmptyState
+            message="No matches. Know a code? Submit it."
+            action={<SubmitTrigger className="btn-primary">Submit a Code</SubmitTrigger>}
+          />
         ) : (
           <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {results.map((cheat) => (

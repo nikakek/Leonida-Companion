@@ -1,6 +1,6 @@
-import Link from "next/link";
+import type { ReactNode } from "react";
 
-export function EmptyState({ message, ctaLabel, ctaHref }: { message: string; ctaLabel: string; ctaHref: string }) {
+export function EmptyState({ message, action }: { message: string; action: ReactNode }) {
   return (
     <div className="flex flex-col items-center gap-4 rounded-card bg-card px-6 py-12 text-center">
       <svg width="56" height="56" viewBox="0 0 56 56" fill="none" aria-hidden="true" focusable="false">
@@ -9,9 +9,7 @@ export function EmptyState({ message, ctaLabel, ctaHref }: { message: string; ct
         <path d="M19 24h10" stroke="#FF9CCB" strokeWidth="2.5" strokeLinecap="round" />
       </svg>
       <p className="text-muted">{message}</p>
-      <Link href={ctaHref} className="btn-primary">
-        {ctaLabel}
-      </Link>
+      {action}
     </div>
   );
 }

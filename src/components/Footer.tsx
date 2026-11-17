@@ -5,7 +5,7 @@ import { secondaryLinks, siteConfig } from "@/config/site";
 
 export function Footer() {
   return (
-    <footer className="mx-auto w-full max-w-[1100px] px-5 pt-16 pb-[calc(var(--bottom-nav-h)+2rem)] md:px-8 md:pb-12">
+    <footer className="mx-auto w-full max-w-[1100px] px-5 pt-16 pb-[calc(var(--bottom-nav-h)+6rem)] md:px-8 md:pb-12">
       <div className="flex flex-col items-start gap-4 rounded-3xl border border-line-strong px-6 py-5 md:flex-row md:items-center md:gap-6 md:rounded-full md:px-10">
         <LogoMark size={32} />
         <div className="flex flex-col gap-1 text-[15px] text-muted">

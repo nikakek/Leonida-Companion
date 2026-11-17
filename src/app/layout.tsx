@@ -6,6 +6,8 @@ import { ConsentPlaceholder } from "@/components/ConsentPlaceholder";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
+import { SubmitDiscovery } from "@/components/submit/SubmitDiscovery";
+import { SubmitFab } from "@/components/submit/SubmitFab";
 import { siteConfig } from "@/config/site";
 import "./globals.css";
 
@@ -73,7 +75,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           {children}
         </main>
         <Footer />
+        <SubmitFab />
         <BottomNav />
+        <SubmitDiscovery />
         <ConsentPlaceholder />
         <ServiceWorkerRegister />
         <Analytics />
