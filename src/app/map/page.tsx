@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
 import { ComingSoon } from "@/components/ComingSoon";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Map",
-  robots: { index: false, follow: true },
-};
+  description: "A stylized map of Leonida with discoveries and progress tracking. Coming soon.",
+  path: "/map",
+  noindex: true,
+});
 
 export default function MapPage() {
   return (

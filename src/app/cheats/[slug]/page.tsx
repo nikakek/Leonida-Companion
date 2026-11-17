@@ -14,7 +14,9 @@ import {
   type Cheat,
   type Platform,
 } from "@/data/cheats";
+import { JsonLd } from "@/components/JsonLd";
 import { formatDate } from "@/lib/format";
+import { GAME_NAME, breadcrumbJsonLd, pageMetadata } from "@/lib/seo";
 
 export const dynamicParams = false;
 
@@ -29,14 +31,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const cheat = getCheat(slug);
   if (!cheat) return {};
   const confirmed = cheat.status === "confirmed";
-  return {
-    title: `${cheat.title} Cheat`,
+  return pageMetadata({
+    title: `${cheat.title} Cheat in ${GAME_NAME}: PS5 and Xbox Button Combo`,
     description: confirmed
-      ? `${cheat.title} cheat button combo for PS5 and Xbox Series X|S.`
-      : `${cheat.title}: not verified yet. No button combo is confirmed for this cheat slot.`,
-    alternates: { canonical: `/cheats/${cheat.slug}` },
-    robots: confirmed ? undefined : { index: false, follow: true },
-  };
+      ? `${cheat.title} cheat in ${GAME_NAME}: the button combo for PS5 and Xbox Series X|S, verified ${cheat.lastVerified}.`
+      : `${cheat.title} cheat in ${GAME_NAME}: not verified yet. No button combo is confirmed for PS5 or Xbox Series X|S.`,
+    path: `/cheats/${cheat.slug}`,
+    image: `/cheats/${cheat.slug}/opengraph-image`,
+    // Unconfirmed cheats stay out of search results and the sitemap.
+    noindex: !confirmed,
+  });
 }
 
 function PlatformCombo({ cheat, platform }: { cheat: Cheat; platform: Platform }) {
@@ -70,16 +74,17 @@ export default async function CheatPage({ params }: Props) {
   if (!cheat) notFound();
 
   const related = cheats.filter((item) => item.category === cheat.category && item.id !== cheat.id).slice(0, 3);
+  const confirmed = cheat.status === "confirmed";
+  const crumbs = [
+    { name: "Home", href: "/" },
+    { name: "Cheats", href: "/cheats" },
+    { name: cheat.title, href: `/cheats/${cheat.slug}` },
+  ];
 
   return (
     <article>
-      <Breadcrumbs
-        items={[
-          { name: "Home", href: "/" },
-          { name: "Cheats", href: "/cheats" },
-          { name: cheat.title, href: `/cheats/${cheat.slug}` },
-        ]}
-      />
+      <JsonLd data={breadcrumbJsonLd(crumbs)} />
+      <Breadcrumbs items={crumbs} />
       <header className="mb-8 max-w-2xl">
         <div className="mb-3 flex flex-wrap items-center gap-3">
           <StatusBadge status={cheat.status} />
@@ -94,6 +99,37 @@ export default async function CheatPage({ params }: Props) {
         <PlatformCombo cheat={cheat} platform="ps5" />
         <PlatformCombo cheat={cheat} platform="xbox" />
       </div>
+
+      <section aria-labelledby="status-title" className="mt-10 max-w-2xl">
+        <h2 id="status-title" className="section-title mb-3">
+          Is It Verified?
+        </h2>
+        {confirmed ? (
+          <p className="text-muted">
+            Yes. This combo was verified on {formatDate(cheat.lastVerified)}
+            {cheat.sourceUrl ? (
+              <>
+                {" "}
+                (
+                <a href={cheat.sourceUrl} className="text-link" target="_blank" rel="noopener noreferrer">
+                  source
+                </a>
+                )
+              </>
+            ) : null}
+            . Pick your platform on the{" "}
+            <Link href="/cheats" className="text-link">
+              Cheats page
+            </Link>{" "}
+            to see combos for your console first.
+          </p>
+        ) : (
+          <p className="text-muted">
+            Not yet. No button combo for {cheat.title} in {GAME_NAME} has been verified on PS5 or Xbox Series X|S, so
+            none is shown. This page will show it once it is confirmed in-game or by an official Rockstar source.
+          </p>
+        )}
+      </section>
 
       {related.length > 0 ? (
         <section aria-labelledby="related-title" className="mt-12">

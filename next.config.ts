@@ -3,6 +3,10 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  // OG images read bundled fonts from disk; make sure they ship with any server bundle.
+  outputFileTracingIncludes: {
+    "/**/*": ["./src/assets/fonts/*.woff"],
+  },
   async headers() {
     return [
       {

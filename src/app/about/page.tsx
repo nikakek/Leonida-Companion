@@ -3,12 +3,13 @@ import Link from "next/link";
 import { PageIntro } from "@/components/PageIntro";
 import { StatusBadge } from "@/components/StatusBadge";
 import { siteConfig } from "@/config/site";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "About",
   description: `About ${siteConfig.name}, an unofficial fan-made companion site, and how entries are verified.`,
-  alternates: { canonical: "/about" },
-};
+  path: "/about",
+});
 
 export default function AboutPage() {
   return (

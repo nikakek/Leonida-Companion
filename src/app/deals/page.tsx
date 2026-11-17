@@ -4,13 +4,14 @@ import { AdSlot } from "@/components/AdSlot";
 import { AffiliateCard } from "@/components/AffiliateCard";
 import { PageIntro } from "@/components/PageIntro";
 import { AMAZON_ASSOCIATE_STATEMENT, affiliateUrls, isProduction } from "@/config/monetization";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Deals: Gift Cards, Storage and Controllers",
   description:
     "Gift cards, console storage and controllers for PS5 and Xbox Series X|S. Every link is clearly labeled as an affiliate link.",
-  alternates: { canonical: "/deals" },
-};
+  path: "/deals",
+});
 
 const hasAnyDeal = Object.values(affiliateUrls).some(Boolean);
 

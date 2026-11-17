@@ -1,4 +1,7 @@
 import { Card } from "@/components/Card";
+import { JsonLd } from "@/components/JsonLd";
+import { siteConfig } from "@/config/site";
+import { absoluteUrl } from "@/lib/seo";
 import { Countdown } from "@/components/Countdown";
 import { QuickSearch } from "@/components/QuickSearch";
 import { SectionHeader } from "@/components/SectionHeader";
@@ -39,9 +42,19 @@ const tabCards = [
   },
 ];
 
+const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: siteConfig.name,
+  url: absoluteUrl("/"),
+  description: siteConfig.description,
+  inLanguage: "en",
+};
+
 export default function HomePage() {
   return (
     <>
+      <JsonLd data={websiteJsonLd} />
       <section aria-labelledby="hero-title" className="relative isolate pt-6 pb-14 md:pt-14 md:pb-20">
         <div aria-hidden="true" className="hero-orb -top-10 left-1/2 -z-10 size-[360px] -translate-x-1/2 md:left-[30%] md:size-[520px]" />
         <Countdown />

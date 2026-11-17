@@ -4,13 +4,15 @@ import { PageIntro } from "@/components/PageIntro";
 import { PlatformToggle } from "@/components/PlatformToggle";
 import { ButtonGuide } from "@/components/cheats/ButtonGuide";
 import { CheatsBrowser } from "@/components/cheats/CheatsBrowser";
+import { GAME_NAME, pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Cheats",
+export const metadata: Metadata = pageMetadata({
+  title: `${GAME_NAME} Cheats for PS5 and Xbox Series X|S`,
   description:
-    "Cheat lookup for PS5 and Xbox Series X|S. Every entry is marked by verification status; combos appear only once confirmed.",
-  alternates: { canonical: "/cheats" },
-};
+    "Cheat lookup for PS5 and Xbox Series X|S with a button guide for both controllers. Every entry is marked by verification status; combos appear only once confirmed.",
+  path: "/cheats",
+  image: "/cheats/opengraph-image",
+});
 
 export default function CheatsPage() {
   return (

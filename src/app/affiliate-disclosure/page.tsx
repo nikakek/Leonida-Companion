@@ -3,12 +3,13 @@ import Link from "next/link";
 import { LegalPage } from "@/components/LegalPage";
 import { AMAZON_ASSOCIATE_STATEMENT, COMMISSION_NOTE } from "@/config/monetization";
 import { siteConfig } from "@/config/site";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Affiliate Disclosure",
   description: `How affiliate links work on ${siteConfig.name}.`,
-  alternates: { canonical: "/affiliate-disclosure" },
-};
+  path: "/affiliate-disclosure",
+});
 
 export default function AffiliateDisclosurePage() {
   return (
