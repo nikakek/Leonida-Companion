@@ -26,7 +26,7 @@ Project rules (content, design tokens, technical rules) live in `CLAUDE.md`.
 
 | Path | What lives there |
 | --- | --- |
-| `src/data/cheats.ts`, `radio.ts`, `pins.ts` | All game data. Every record has `status`, `lastVerified`, optional `sourceUrl`. |
+| `src/data/cheats.ts`, `radio.ts`, `pins.ts`, `news.ts` | All game data. Every record has `status`, `lastVerified`, optional `sourceUrl`. |
 | `src/config/site.ts` | Site name, URL, description, disclaimer, contact email. |
 | `src/config/monetization.ts` | Affiliate, ads and analytics settings (from env vars). |
 | `src/config/regions.ts` | Map regions and colors. |

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { LogoMark } from "@/components/LogoMark";
 import { AMAZON_ASSOCIATE_STATEMENT } from "@/config/monetization";
-import { navTabs, secondaryLinks, siteConfig } from "@/config/site";
+import { primaryNav, secondaryLinks, siteConfig } from "@/config/site";
 
 export function Footer() {
   return (
@@ -18,7 +18,7 @@ export function Footer() {
           </div>
           <nav aria-label="Footer" className="grid shrink-0 grid-cols-2 gap-x-10 gap-y-1 text-[14px] whitespace-nowrap">
             <ul className="flex flex-col">
-              {navTabs.map((tab) => (
+              {primaryNav.map((tab) => (
                 <li key={tab.href}>
                   <Link href={tab.href} className="inline-flex min-h-10 items-center text-muted transition-colors duration-150 hover:text-fg">
                     {tab.label}

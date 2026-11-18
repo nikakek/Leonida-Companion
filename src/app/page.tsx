@@ -8,8 +8,10 @@ import { SectionHeader } from "@/components/SectionHeader";
 import { HeroArt } from "@/components/home/HeroArt";
 import { HeroSkyline } from "@/components/home/HeroSkyline";
 import { HomeSession } from "@/components/home/HomeSession";
+import { NewsCard } from "@/components/news/NewsCard";
 import { siteConfig, type NavIcon } from "@/config/site";
 import { cheats } from "@/data/cheats";
+import { sortedNews } from "@/data/news";
 import { pins } from "@/data/pins";
 import { stations, trackAnchor } from "@/data/radio";
 import { absoluteUrl } from "@/lib/seo";
@@ -156,6 +158,21 @@ export default function HomePage() {
         <SectionHeader id="session-title" eyebrow="Saved on this device" title="Your Session" />
         <HomeSession />
       </section>
+
+      {sortedNews.length > 0 ? (
+        <section aria-labelledby="news-title" className="mt-12 md:mt-16">
+          <SectionHeader id="news-title" eyebrow="Linked to official sources" title="Latest News" href="/news" linkLabel="All news" />
+          <ul className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
+            {sortedNews.slice(0, 3).map((item) => (
+              <li key={item.slug} className="flex">
+                <div className="flex-1">
+                  <NewsCard item={item} headingLevel="h3" />
+                </div>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
 
       <section aria-labelledby="dial-title" className="mt-12 md:mt-16">
         <SectionHeader id="dial-title" eyebrow={`${stations.length} stations`} title="Station Dial" href="/radio" linkLabel="All radio" />

@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { CloseIcon, NavGlyph } from "@/components/Icons";
 import { Wordmark } from "@/components/LogoMark";
-import { navTabs, secondaryLinks } from "@/config/site";
+import { primaryNav, secondaryLinks } from "@/config/site";
 
 /** Two-bar hamburger opening a full-screen native <dialog> menu. */
 export function MenuDialog() {
@@ -63,7 +63,7 @@ export function MenuDialog() {
           <nav aria-label="Menu" className="mt-6 flex flex-1 flex-col gap-10 md:mt-14">
             <p className="eyebrow">Navigate</p>
             <ul className="-mt-6 flex flex-col border-t border-line">
-              {navTabs.map((tab, index) => {
+              {primaryNav.map((tab, index) => {
                 const active = pathname === tab.href || pathname.startsWith(`${tab.href}/`);
                 return (
                   <li key={tab.href}>

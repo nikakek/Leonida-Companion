@@ -97,6 +97,15 @@ export function NavGlyph({ icon, ...props }: IconProps & { icon: NavIcon }) {
           <path d="M9 4.5v13M15 6.5v13" />
         </svg>
       );
+    case "news":
+      // Folded page with a headline bar and text lines.
+      return (
+        <svg {...base(props)}>
+          <path d="M5.5 4h10a2 2 0 0 1 2 2v12.5a1.5 1.5 0 0 0 3 0V9h-3" />
+          <path d="M20.5 20H6a2.5 2.5 0 0 1-2.5-2.5V6A2 2 0 0 1 5.5 4" />
+          <path d="M7 8h7M7 12h7M7 15.5h4.5" />
+        </svg>
+      );
     case "deals":
       return (
         <svg {...base(props)}>
