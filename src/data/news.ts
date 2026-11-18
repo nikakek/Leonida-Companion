@@ -2,7 +2,7 @@
 
 import type { Verifiable } from "@/lib/types";
 
-export const newsTags = ["Release", "Launch", "Platforms"] as const;
+export const newsTags = ["Release", "Launch", "Platforms", "Trailers"] as const;
 export type NewsTag = (typeof newsTags)[number];
 
 export interface NewsSource {
@@ -110,6 +110,21 @@ export const news: NewsItem[] = [
     lastVerified: LAST_VERIFIED,
     sourceUrl: `${NEWSWIRE}/ak3ak31a49a221/grand-theft-auto-vi-is-now-set-to-launch-november-19-2026`,
   },
+  {
+    slug: "trailer-2-released",
+    title: "Trailer 2 Released",
+    date: "2025-05-06",
+    tag: "Trailers",
+    summary: "Rockstar released the second GTA 6 trailer, following Jason and Lucia across the state of Leonida.",
+    body: [
+      "Rockstar published Trailer 2 for GTA 6 on its Newswire and the official game site. It centres on the two lead characters, Jason and Lucia, and their story across the state of Leonida, including Vice City.",
+      "Watch it on Rockstar's own pages linked below rather than on re-uploads. This site does not host trailers, screenshots or other official media.",
+    ],
+    status: "confirmed",
+    lastVerified: LAST_VERIFIED,
+    sourceUrl: `${NEWSWIRE}/3928aaa9471o3a/grand-theft-auto-vi-watch-trailer-2-now`,
+    sources: [{ label: "Trailer 2 on rockstargames.com", url: "https://www.rockstargames.com/VI/trailer-2" }],
+  },
 ];
 
 /** Newest first. */
@@ -130,4 +145,5 @@ export const newsTagAccents: Record<NewsTag, string> = {
   Release: "#FF4D9D",
   Launch: "#FFB547",
   Platforms: "#3DE3F0",
+  Trailers: "#9D7BFF",
 };

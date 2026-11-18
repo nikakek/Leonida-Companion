@@ -4,6 +4,7 @@ import { hasAnyDeal } from "@/config/monetization";
 import { cheats } from "@/data/cheats";
 import { news } from "@/data/news";
 import { pins } from "@/data/pins";
+import { releaseFacts } from "@/data/release";
 import { stations } from "@/data/radio";
 import { absoluteUrl } from "@/lib/seo";
 import { latestVerified } from "@/lib/verification";
@@ -26,6 +27,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/cheats", priority: 0.9, changeFrequency: "daily", lastModified: cheatsUpdated },
     { path: "/radio", priority: 0.9, changeFrequency: "daily", lastModified: radioUpdated },
     { path: "/map", priority: 0.8, changeFrequency: "daily", lastModified: mapUpdated },
+    { path: "/release-date", priority: 0.8, changeFrequency: "daily", lastModified: latestVerified(releaseFacts) },
     { path: "/news", priority: 0.8, changeFrequency: "daily", lastModified: newsUpdated },
     ...(hasAnyDeal ? [{ path: "/deals", priority: 0.4, changeFrequency: "weekly" as const, lastModified: LEGAL_UPDATED }] : []),
     { path: "/about", priority: 0.3, changeFrequency: "monthly", lastModified: LEGAL_UPDATED },

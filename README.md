@@ -26,7 +26,7 @@ Project rules (content, design tokens, technical rules) live in `CLAUDE.md`.
 
 | Path | What lives there |
 | --- | --- |
-| `src/data/cheats.ts`, `radio.ts`, `pins.ts`, `news.ts` | All game data. Every record has `status`, `lastVerified`, optional `sourceUrl`. |
+| `src/data/cheats.ts`, `radio.ts`, `pins.ts`, `news.ts`, `release.ts` | All game data. Every record has `status`, `lastVerified`, optional `sourceUrl`. |
 | `src/config/site.ts` | Site name, URL, description, disclaimer, contact email. |
 | `src/config/monetization.ts` | Affiliate, ads and analytics settings (from env vars). |
 | `src/config/regions.ts` | Map regions and colors. |
@@ -129,7 +129,8 @@ This is a fan site that uses the game's name to describe what it covers. Even wi
 
 ## Go-Live Checklist
 
-- [ ] Deploy and connect the domain; set `NEXT_PUBLIC_SITE_URL` to it and redeploy.
+- [x] Deploy (Netlify). Canonical URLs fall back to Netlify's `URL` until `NEXT_PUBLIC_SITE_URL` is set.
+- [ ] Connect a custom domain; set `NEXT_PUBLIC_SITE_URL` to it (or make it Netlify's primary domain) and redeploy.
 - [ ] Set `NEXT_PUBLIC_CONTACT_EMAIL`.
 - [ ] Set `SUBMISSION_WEBHOOK_URL` and send a test submission.
 - [ ] Create an Upstash Redis database and set `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN`.

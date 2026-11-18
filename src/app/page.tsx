@@ -98,6 +98,12 @@ export default function HomePage() {
           <div className="flex flex-wrap items-center gap-3">
             <Countdown />
             <span className="font-mono text-[11px] tracking-[0.14em] text-faint uppercase">Unofficial field guide</span>
+            <Link
+              href="/release-date"
+              className="inline-flex min-h-11 items-center font-mono text-[11px] tracking-[0.14em] text-muted uppercase transition-colors duration-150 hover:text-fg"
+            >
+              Release info
+            </Link>
           </div>
 
           <div className="grid flex-1 grid-cols-1 items-center gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.95fr)] xl:gap-12">

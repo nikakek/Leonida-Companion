@@ -153,7 +153,8 @@ export default function CheatsPage() {
           in gradually from launch day, one tested code at a time.
         </p>
         <p>
-          Follow release and launch updates in <Link href="/news" className="text-link">{GAME_NAME} news</Link>.
+          See the <Link href="/release-date" className="text-link">{GAME_NAME} release date page</Link> for launch details,
+          and <Link href="/news" className="text-link">{GAME_NAME} news</Link> for updates.
         </p>
       </GuideSection>
 

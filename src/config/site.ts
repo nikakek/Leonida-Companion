@@ -1,4 +1,5 @@
-const rawUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+// Resolved in next.config.ts: NEXT_PUBLIC_SITE_URL, then Netlify's `URL`, then localhost.
+const rawUrl = process.env.SITE_URL || "http://localhost:3000";
 const url = rawUrl.replace(/\/+$/, "");
 
 export const siteConfig = {

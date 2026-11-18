@@ -21,6 +21,11 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  // Canonical base URL, inlined at build time: NEXT_PUBLIC_SITE_URL when set, else Netlify's built-in
+  // `URL` (the site's primary address, e.g. *.netlify.app until a custom domain is added).
+  env: {
+    SITE_URL: process.env.NEXT_PUBLIC_SITE_URL || process.env.URL || "http://localhost:3000",
+  },
   poweredByHeader: false,
   // OG images read bundled fonts from disk; make sure they ship with any server bundle.
   outputFileTracingIncludes: {
