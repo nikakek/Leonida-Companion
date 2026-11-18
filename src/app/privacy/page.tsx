@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { LegalPage } from "@/components/LegalPage";
+import { SubmitTrigger } from "@/components/submit/SubmitTrigger";
+import { adsenseClientId } from "@/config/monetization";
 import { siteConfig } from "@/config/site";
 import { pageMetadata } from "@/lib/seo";
 
@@ -32,8 +34,8 @@ export default function PrivacyPage() {
         <h2>Submissions</h2>
         <p>
           When you use &ldquo;Submit a Discovery&rdquo;, we receive what you type: title, region, category,
-          description and, only if you add it, a contact (email or handle). Your IP address is used briefly in memory
-          to limit spam and is not stored with the submission. Submissions are reviewed by hand and are never
+          description and, only if you add it, a contact (email or handle). To limit spam we keep a counter tied to a
+          one-way hash of your IP address for up to 10 minutes; your IP address is not stored with the submission. Submissions are reviewed by hand and are never
           published automatically. Ask us to delete a submission using the contact below.
         </p>
       </section>
@@ -50,9 +52,11 @@ export default function PrivacyPage() {
       <section>
         <h2>Advertising</h2>
         <p>
-          The site currently shows no ads. If ads are added later, ad partners may use cookies or similar
-          technologies to show and measure ads. Where the law requires it (for example in the EU and UK), we will ask
-          for your consent before any advertising cookies are set.
+          {adsenseClientId
+            ? "This site shows ads from Google AdSense. Google and its partners may use cookies or similar technologies to show and measure ads, including ads based on your earlier visits to this and other sites. You can manage ad personalization at adssettings.google.com."
+            : "The site currently shows no ads. If ads are added later, ad partners may use cookies or similar technologies to show and measure ads."}{" "}
+          Where the law requires it (for example in the EU and UK), you are asked for consent before any advertising
+          cookies are set.
         </p>
       </section>
 
@@ -76,7 +80,17 @@ export default function PrivacyPage() {
       <section>
         <h2>Contact</h2>
         <p>
-          Questions about privacy: <strong>{siteConfig.contactEmail}</strong>
+          {siteConfig.contactEmail ? (
+            <>
+              Questions about privacy: <strong>{siteConfig.contactEmail}</strong>
+            </>
+          ) : (
+            <>
+              Questions about privacy or a deletion request:{" "}
+              <SubmitTrigger className="text-link">send a message through the submission form</SubmitTrigger> (category
+              &ldquo;Other&rdquo;) and add a contact so we can reply.
+            </>
+          )}
         </p>
       </section>
     </LegalPage>
