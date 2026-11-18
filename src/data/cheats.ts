@@ -43,6 +43,24 @@ function placeholder(id: string, slug: string, title: string, category: CheatCat
   };
 }
 
+/*
+ * HOW TO CONFIRM A CHEAT: replace its `placeholder(...)` line with a full entry like this one.
+ * Combos, the copy button, indexing and the sitemap entry switch on by themselves.
+ *
+ *   {
+ *     id: "c02",                       // keep the id: visitors' starred cheats point to it
+ *     slug: "lower-wanted-level",      // keep the slug: it is the page URL
+ *     title: "Lower Wanted Level",
+ *     category: "Player",
+ *     description: "One sentence on what it does, as seen in-game.",
+ *     inputs: { ps5: ["up", "triangle", "l1", "cross"], xbox: ["up", "y", "lb", "a"] },  // example format only, not a real code
+ *     status: "confirmed",
+ *     lastVerified: "2026-11-19",      // the day you tested it
+ *     sourceUrl: "https://...",        // optional
+ *   },
+ *
+ * Button names: see the Ps5Btn / XboxBtn types above. A typo is a type error, not a broken page.
+ */
 export const cheats: Cheat[] = [
   placeholder("c01", "max-health-and-armor", "Max Health and Armor", "Player", "Slot reserved for a health and armor refill cheat, if one exists."),
   placeholder("c02", "lower-wanted-level", "Lower Wanted Level", "Player", "Slot reserved for a wanted-level reduction cheat, if one exists."),

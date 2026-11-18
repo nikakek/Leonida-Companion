@@ -26,13 +26,19 @@ export interface Station extends Verifiable {
   tracks: Track[];
 }
 
+/*
+ * HOW TO ADD A TRACK: add a line to the station's `tracks`, with the day you checked it:
+ *   track("Artist", "Song Title", "confirmed", "2026-11-19"),
+ * Use "testing" for a reported but unchecked song. To confirm an existing one, change its status and add the date.
+ * HOW TO ADD A STATION: copy a station block, give it a new `slug` (the page URL) and an `accent` color.
+ */
 const VERIFIED = "2026-11-17";
 
-const track = (artist: string, title: string, status: Track["status"]): Track => ({
+const track = (artist: string, title: string, status: Track["status"], lastVerified = VERIFIED): Track => ({
   artist,
   title,
   status,
-  lastVerified: VERIFIED,
+  lastVerified,
 });
 
 export const stations: Station[] = [

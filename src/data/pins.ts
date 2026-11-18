@@ -31,6 +31,20 @@ function sample(id: string, title: string, region: RegionId, category: PinCatego
   return { id, title, region, category, description: SAMPLE_NOTE, x, y, status: "sample", lastVerified: LAST_VERIFIED };
 }
 
+/*
+ * HOW TO ADD A REAL PIN: add a full entry (and delete the samples once you have real ones).
+ *
+ *   {
+ *     id: "p13",                      // unique; never reuse an id (visitors' progress points to it)
+ *     title: "Rooftop Mural",
+ *     region: "vice-city",
+ *     category: "easter-egg",
+ *     description: "On the roof of the pink hotel, reached from the fire escape.",
+ *     x: 640, y: 500,                 // position on the 800 x 1000 stylized map, not game coordinates
+ *     status: "confirmed",            // or "testing" for a reported but unchecked find
+ *     lastVerified: "2026-11-19",
+ *   },
+ */
 export const pins: Pin[] = [
   sample("p01", "Sample Collectible A", "port-gellhorn", "collectible", 95, 185),
   sample("p02", "Sample Stunt Jump A", "port-gellhorn", "stunt-jump", 200, 205),
