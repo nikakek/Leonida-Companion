@@ -9,25 +9,42 @@ interface ThumbProps {
 
 const W = 320;
 const H = 180;
+const BASE = 132;
 
-/** Abstract skyline: seeded rectangles along a waterline. */
-function skyline(rand: () => number): string {
+interface Tower {
+  x: number;
+  w: number;
+  top: number;
+}
+
+/** Abstract skyline: seeded towers along a waterline. */
+function towers(rand: () => number): Tower[] {
+  const list: Tower[] = [];
   let x = -4;
-  const base = 136;
-  let d = "";
   while (x < W + 4) {
     const w = 10 + rand() * 22;
-    const h = 18 + Math.pow(rand(), 1.6) * 78;
-    const top = base - h;
-    d += `M${x.toFixed(1)} ${base}V${top.toFixed(1)}H${(x + w).toFixed(1)}V${base}Z`;
-    if (rand() > 0.72) {
-      // Thin antenna on some towers.
-      const ax = x + w / 2;
-      d += `M${(ax - 0.8).toFixed(1)} ${top.toFixed(1)}V${(top - 10).toFixed(1)}H${(ax + 0.8).toFixed(1)}V${top.toFixed(1)}Z`;
-    }
+    const h = 16 + Math.pow(rand(), 1.6) * 80;
+    list.push({ x, w, top: BASE - h });
     x += w + 1 + rand() * 4;
   }
-  return d;
+  return list;
+}
+
+const towerPath = (list: Tower[]) =>
+  list.map((t) => `M${t.x.toFixed(1)} ${BASE}V${t.top.toFixed(1)}H${(t.x + t.w).toFixed(1)}V${BASE}Z`).join("");
+
+/** Sparse lit windows on the taller towers. */
+function windows(list: Tower[], rand: () => number): { x: number; y: number }[] {
+  const lit: { x: number; y: number }[] = [];
+  for (const tower of list) {
+    if (BASE - tower.top < 40) continue;
+    for (let y = tower.top + 6; y < BASE - 6; y += 7) {
+      for (let x = tower.x + 3; x < tower.x + tower.w - 3; x += 5) {
+        if (rand() > 0.86) lit.push({ x, y });
+      }
+    }
+  }
+  return lit;
 }
 
 /** Single abstract palm: curved trunk plus a fan of tapered fronds. */
@@ -50,22 +67,19 @@ function palm(rand: () => number, cx: number, scale: number): string {
   return d;
 }
 
-/** Original generated thumbnail art: gradient mesh in the accent color plus a silhouette. No images. */
+/**
+ * Original generated art: a night sky in the item's accent color, a thin horizon glow,
+ * an abstract skyline with a few lit windows and optional palms. No images.
+ */
 export function Thumb({ accent, seed, className }: ThumbProps) {
   const id = useId();
   const rand = seededRandom(seed);
-  const blobs = Array.from({ length: 3 }, (_, i) => ({
-    cx: 20 + rand() * 60,
-    cy: 10 + rand() * 50,
-    r: 45 + rand() * 30,
-    color: i === 1 ? "#8A4DFF" : accent,
-    opacity: i === 1 ? 0.45 : 0.75 - i * 0.15,
-  }));
-  const usePalms = rand() > 0.5;
-  const city = skyline(rand);
-  const palms = usePalms
-    ? [palm(rand, 40 + rand() * 60, 1), palm(rand, 200 + rand() * 80, 0.8)].join("")
-    : "";
+  const glowX = 20 + rand() * 60;
+  const city = towers(rand);
+  const lit = windows(city, rand);
+  const usePalms = rand() > 0.55;
+  const palms = usePalms ? [palm(rand, 30 + rand() * 60, 1), palm(rand, 220 + rand() * 70, 0.8)].join("") : "";
+  const cityPath = towerPath(city);
 
   return (
     <svg
@@ -76,25 +90,30 @@ export function Thumb({ accent, seed, className }: ThumbProps) {
       focusable="false"
     >
       <defs>
-        {blobs.map((blob, i) => (
-          <radialGradient key={i} id={`${id}-b${i}`} cx={`${blob.cx}%`} cy={`${blob.cy}%`} r={`${blob.r}%`}>
-            <stop offset="0" stopColor={blob.color} stopOpacity={blob.opacity} />
-            <stop offset="1" stopColor={blob.color} stopOpacity="0" />
-          </radialGradient>
-        ))}
+        <linearGradient id={`${id}-sky`} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#08080D" />
+          <stop offset="0.7" stopColor="#0E1424" />
+          <stop offset="1" stopColor={accent} stopOpacity="0.55" />
+        </linearGradient>
+        <radialGradient id={`${id}-glow`} cx={`${glowX}%`} cy="74%" r="55%">
+          <stop offset="0" stopColor={accent} stopOpacity="0.55" />
+          <stop offset="1" stopColor={accent} stopOpacity="0" />
+        </radialGradient>
         <linearGradient id={`${id}-water`} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor={accent} stopOpacity="0.28" />
-          <stop offset="1" stopColor="#0B0A1C" stopOpacity="0.9" />
+          <stop offset="0" stopColor={accent} stopOpacity="0.22" />
+          <stop offset="1" stopColor="#08080D" />
         </linearGradient>
       </defs>
-      <rect width={W} height={H} fill="#1A1736" />
-      {blobs.map((_, i) => (
-        <rect key={i} width={W} height={H} fill={`url(#${id}-b${i})`} />
+      <rect width={W} height={H} fill={`url(#${id}-sky)`} />
+      <rect width={W} height={H} fill={`url(#${id}-glow)`} />
+      <path d={cityPath} fill="#08080D" fillOpacity={usePalms ? 0.7 : 0.88} />
+      {lit.map((w, i) => (
+        <rect key={i} x={w.x.toFixed(1)} y={w.y.toFixed(1)} width="1.6" height="2.2" fill={i % 3 === 0 ? accent : "#FFD9A0"} fillOpacity="0.7" />
       ))}
-      <path d={city} fill="#0B0A1C" fillOpacity={usePalms ? 0.45 : 0.72} />
-      {palms ? <path d={palms} fill="#0B0A1C" fillOpacity="0.85" /> : null}
-      <rect y="136" width={W} height={H - 136} fill={`url(#${id}-water)`} />
-      <path d={city} fill="#0B0A1C" fillOpacity="0.18" transform="translate(0 272) scale(1 -1)" />
+      {palms ? <path d={palms} fill="#08080D" /> : null}
+      <rect y={BASE} width={W} height={H - BASE} fill={`url(#${id}-water)`} />
+      <rect y={BASE} width={W} height="1" fill={accent} fillOpacity="0.6" />
+      <path d={cityPath} fill={accent} fillOpacity="0.07" transform={`translate(0 ${BASE * 2}) scale(1 -1)`} />
     </svg>
   );
 }

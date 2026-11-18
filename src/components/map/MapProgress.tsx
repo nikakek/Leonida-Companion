@@ -20,15 +20,21 @@ export function MapProgress({ found, onReset }: MapProgressProps) {
   const closeConfirm = () => confirmRef.current?.close();
 
   return (
-    <section aria-labelledby="progress-title" className="rounded-card bg-card p-5 md:p-6">
-      <div className="flex items-baseline justify-between gap-3">
-        <h2 id="progress-title" ref={headingRef} tabIndex={-1} className="card-title">
+    <section aria-labelledby="progress-title" className="panel p-4 md:p-5">
+      <div className="flex items-center justify-between gap-3">
+        <h2 id="progress-title" ref={headingRef} tabIndex={-1} className="eyebrow text-muted">
           Progress
         </h2>
-        <p className="font-mono text-[14px] text-muted">{percent}%</p>
+        <p className="font-mono text-[12px] text-faint">{percent}%</p>
       </div>
+      <p className="display mt-2 text-[52px] leading-none">
+        {foundCount}
+        <span className="text-faint"> / {total}</span>
+        <span className="ml-2 align-middle font-mono text-[11px] tracking-[0.12em] text-muted">FOUND</span>
+      </p>
+      {/* One segment per pin, grouped by region and lit in the region color once found. */}
       <div
-        className="progress-track mt-3"
+        className="mt-3 flex gap-[3px]"
         role="progressbar"
         aria-label="Pins found"
         aria-valuemin={0}
@@ -36,19 +42,29 @@ export function MapProgress({ found, onReset }: MapProgressProps) {
         aria-valuenow={foundCount}
         aria-valuetext={`${foundCount} of ${total} found`}
       >
-        <div className="progress-fill" style={{ width: `${percent}%` }} />
+        {regions.flatMap((region) =>
+          pins
+            .filter((pin) => pin.region === region.id)
+            .map((pin) => (
+              <span
+                key={pin.id}
+                className="h-2.5 flex-1 rounded-[2px] transition-colors duration-150"
+                style={{
+                  backgroundColor: found.has(pin.id) ? region.color : "#1E1E2B",
+                  boxShadow: found.has(pin.id) ? `0 0 8px -1px ${region.color}` : undefined,
+                }}
+              />
+            )),
+        )}
       </div>
-      <p className="mt-2 text-[15px] text-muted">
-        {foundCount} / {total} found
-      </p>
 
-      <ul className="mt-5 flex flex-col gap-3">
+      <ul className="mt-5 flex flex-col gap-2.5 border-t border-line pt-4">
         {regions.map((region) => {
           const regionPins = pins.filter((pin) => pin.region === region.id);
           const regionFound = regionPins.filter((pin) => found.has(pin.id)).length;
           const regionPercent = regionPins.length === 0 ? 0 : (regionFound / regionPins.length) * 100;
           return (
-            <li key={region.id} className="grid grid-cols-[1fr_auto] items-center gap-x-3 gap-y-1.5 text-[15px]">
+            <li key={region.id} className="grid grid-cols-[1fr_auto] items-center gap-x-3 gap-y-1.5 text-[14px]">
               <span className="flex items-center gap-2">
                 <span aria-hidden="true" className="size-2 rounded-full" style={{ backgroundColor: region.color }} />
                 {region.name}
@@ -56,7 +72,7 @@ export function MapProgress({ found, onReset }: MapProgressProps) {
               <span className="font-mono text-[13px] text-muted">
                 {regionFound}/{regionPins.length}
               </span>
-              <span aria-hidden="true" className="col-span-2 h-1.5 overflow-hidden rounded-full bg-bg">
+              <span aria-hidden="true" className="col-span-2 h-1 overflow-hidden rounded-full bg-[#1E1E2B]">
                 <span
                   className="block h-full rounded-full transition-[width] duration-150"
                   style={{ width: `${regionPercent}%`, backgroundColor: region.color }}
@@ -70,7 +86,7 @@ export function MapProgress({ found, onReset }: MapProgressProps) {
       <button
         ref={resetButtonRef}
         type="button"
-        className="btn-secondary btn-sm mt-6"
+        className="btn-secondary btn-sm mt-5"
         disabled={foundCount === 0}
         onClick={() => confirmRef.current?.showModal()}
       >
@@ -81,7 +97,7 @@ export function MapProgress({ found, onReset }: MapProgressProps) {
         ref={confirmRef}
         aria-labelledby="reset-title"
         aria-describedby="reset-description"
-        className="dialog-sheet dialog-modal backdrop:bg-transparent"
+        className="dialog-sheet dialog-modal"
         onClose={() => {
           // After a reset the button is disabled and cannot take focus, so fall back to the heading.
           const button = resetButtonRef.current;
@@ -89,8 +105,9 @@ export function MapProgress({ found, onReset }: MapProgressProps) {
           else headingRef.current?.focus();
         }}
       >
-        <div className="flex flex-col gap-4 p-5 pb-[calc(1.25rem+env(safe-area-inset-bottom))] md:p-8">
-          <h2 id="reset-title" className="card-title">
+        <div className="flex flex-col gap-4 p-5 pb-[calc(1.25rem+env(safe-area-inset-bottom))] md:p-7">
+          <p className="eyebrow text-danger">Destructive</p>
+          <h2 id="reset-title" className="section-title -mt-2">
             Reset Progress?
           </h2>
           <p id="reset-description" className="text-muted">

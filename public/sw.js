@@ -6,7 +6,7 @@
  * The offline fallback is a static, self-contained HTML file (no JS chunks to miss).
  * Bump CACHE_VERSION whenever this file's caching logic changes.
  */
-const CACHE_VERSION = "v1";
+const CACHE_VERSION = "v3";
 const STATIC_CACHE = `leonida-static-${CACHE_VERSION}`;
 const PAGES_CACHE = `leonida-pages-${CACHE_VERSION}`;
 const OFFLINE_URL = "/offline.html";

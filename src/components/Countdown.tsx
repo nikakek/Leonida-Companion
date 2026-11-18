@@ -19,7 +19,7 @@ function remainingLabel(now: number, target: number): string {
   return `${days}d ${hours}h ${mins}m`;
 }
 
-/** "Launch Day" chip. The countdown text renders only after mount to avoid hydration mismatch. */
+/** Launch chip. The countdown text renders only after mount to avoid hydration mismatch. */
 export function Countdown() {
   const [label, setLabel] = useState<string | null>(null);
 
@@ -34,16 +34,14 @@ export function Countdown() {
   const isOut = label === "Out now";
 
   return (
-    <p className="inline-flex min-h-10 items-center gap-2.5 rounded-full bg-card py-1.5 pr-4 pl-1.5 text-[15px]">
-      <span className="rounded-full bg-accent px-3 py-1 text-[13px] font-semibold text-on-accent">
-        {isOut ? "Out now" : "Launch Day"}
+    <p className="inline-flex h-8 items-center gap-2.5 rounded-[4px] border border-line-strong bg-bg/70 pr-3 pl-2 font-mono text-[11px] tracking-[0.1em] uppercase">
+      <span className="relative flex size-2">
+        <span aria-hidden="true" className="absolute inset-0 rounded-full bg-accent shadow-[0_0_8px_rgba(255,77,157,0.9)]" />
       </span>
-      <span className="font-medium">{siteConfig.launchLabel}</span>
+      <span className="text-accent">{isOut ? "Out now" : "Launch"}</span>
+      <span className="text-fg">{siteConfig.launchLabel}</span>
       {!isOut ? (
-        <span
-          className="inline-block min-w-[10ch] font-mono text-[13px] text-muted tabular-nums"
-          aria-live="off"
-        >
+        <span className="inline-block min-w-[10ch] text-muted tabular-nums" aria-live="off">
           {label ? <span>{label}</span> : <span className="invisible">00d 00h 00m</span>}
         </span>
       ) : null}

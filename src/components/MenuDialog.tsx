@@ -31,38 +31,39 @@ export function MenuDialog() {
         aria-label="Open menu"
         aria-haspopup="dialog"
         onClick={() => dialogRef.current?.showModal()}
-        className="flex size-12 items-center justify-center rounded-full text-fg transition-colors duration-150 hover:text-accent"
+        className="icon-btn size-11 text-fg"
       >
-        <svg width="28" height="20" viewBox="0 0 28 20" aria-hidden="true" focusable="false">
-          <rect x="1" y="3" width="26" height="3.5" rx="1" fill="currentColor" />
-          <rect x="1" y="13.5" width="26" height="3.5" rx="1" fill="currentColor" />
+        <svg width="20" height="14" viewBox="0 0 20 14" aria-hidden="true" focusable="false">
+          <rect y="1" width="20" height="2" rx="1" fill="currentColor" />
+          <rect x="6" y="11" width="14" height="2" rx="1" fill="currentColor" />
         </svg>
       </button>
       <dialog
         ref={dialogRef}
         aria-label="Site menu"
-        className="menu-dialog m-0 h-dvh max-h-none w-full max-w-none bg-bg p-0 text-fg backdrop:bg-transparent"
+        className="menu-dialog m-0 h-dvh max-h-none w-full max-w-none bg-bg p-0 text-fg"
         onClick={(event) => {
           if (event.target === event.currentTarget) close();
         }}
       >
-        <div className="mx-auto flex min-h-full max-w-[1100px] flex-col px-5 pt-[env(safe-area-inset-top)] pb-[calc(2rem+env(safe-area-inset-bottom))] md:px-8">
+        <div className="flex min-h-full flex-col px-[var(--gutter)] pt-[env(safe-area-inset-top)] pb-[calc(2rem+env(safe-area-inset-bottom))]">
           <div className="flex h-16 items-center justify-between">
-            <Link href="/" onClick={close} aria-label="Leonida Companion home" className="rounded-xl">
+            <Link href="/" onClick={close} aria-label="Leonida Companion home" className="rounded-md">
               <Wordmark />
             </Link>
             <button
               type="button"
               aria-label="Close menu"
               onClick={close}
-              className="flex size-12 items-center justify-center rounded-full text-fg transition-colors duration-150 hover:text-accent"
+              className="icon-btn size-11 text-fg"
             >
-              <CloseIcon size={28} />
+              <CloseIcon size={22} />
             </button>
           </div>
-          <nav aria-label="Menu" className="mt-8 flex flex-1 flex-col gap-10 md:mt-16">
-            <ul className="flex flex-col gap-1">
-              {navTabs.map((tab) => {
+          <nav aria-label="Menu" className="mt-6 flex flex-1 flex-col gap-10 md:mt-14">
+            <p className="eyebrow">Navigate</p>
+            <ul className="-mt-6 flex flex-col border-t border-line">
+              {navTabs.map((tab, index) => {
                 const active = pathname === tab.href || pathname.startsWith(`${tab.href}/`);
                 return (
                   <li key={tab.href}>
@@ -70,24 +71,25 @@ export function MenuDialog() {
                       href={tab.href}
                       onClick={close}
                       aria-current={active ? "page" : undefined}
-                      className={`flex min-h-14 items-center gap-4 rounded-2xl py-2 text-[clamp(2rem,1.6rem+2vw,3rem)] font-medium transition-colors duration-150 hover:text-accent ${
+                      className={`group flex min-h-16 items-center gap-4 border-b border-line py-3 transition-colors duration-150 hover:text-accent ${
                         active ? "text-accent" : "text-fg"
                       }`}
                     >
-                      <NavGlyph icon={tab.icon} size={32} />
-                      {tab.label}
+                      <span className="w-7 font-mono text-[12px] text-faint">0{index + 1}</span>
+                      <span className="display flex-1 text-[clamp(2.5rem,2rem+3vw,4rem)]">{tab.label}</span>
+                      <NavGlyph icon={tab.icon} size={26} className="text-muted transition-colors duration-150 group-hover:text-accent" />
                     </Link>
                   </li>
                 );
               })}
             </ul>
-            <ul className="flex flex-col gap-1 border-t border-line pt-6">
+            <ul className="flex flex-wrap gap-x-6 gap-y-1">
               {secondaryLinks.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
                     onClick={close}
-                    className="flex min-h-12 items-center rounded-xl text-lg text-muted transition-colors duration-150 hover:text-fg"
+                    className="flex min-h-11 items-center font-mono text-[13px] tracking-[0.08em] text-muted uppercase transition-colors duration-150 hover:text-fg"
                   >
                     {link.label}
                   </Link>

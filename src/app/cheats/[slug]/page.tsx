@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import type { CSSProperties } from "react";
 import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { ComboBadges } from "@/components/ControllerBadge";
@@ -7,6 +8,7 @@ import { StatusBadge } from "@/components/StatusBadge";
 import { CopyComboButton } from "@/components/cheats/CopyComboButton";
 import {
   buttonNames,
+  categoryAccents,
   cheats,
   getCheat,
   hasVerifiedCombo,
@@ -32,7 +34,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!cheat) return {};
   const confirmed = cheat.status === "confirmed";
   return pageMetadata({
-    title: `${cheat.title} Cheat in ${GAME_NAME}: PS5 and Xbox Button Combo`,
+    title: confirmed
+      ? `${cheat.title} Cheat in ${GAME_NAME}: PS5 and Xbox Button Combo`
+      : `${cheat.title} Cheat in ${GAME_NAME}: Not Verified Yet`,
     description: confirmed
       ? `${cheat.title} cheat in ${GAME_NAME}: the button combo for PS5 and Xbox Series X|S, verified ${cheat.lastVerified}.`
       : `${cheat.title} cheat in ${GAME_NAME}: not verified yet. No button combo is confirmed for PS5 or Xbox Series X|S.`,
@@ -47,8 +51,8 @@ function PlatformCombo({ cheat, platform }: { cheat: Cheat; platform: Platform }
   const verified = hasVerifiedCombo(cheat, platform);
   const names = (platform === "ps5" ? cheat.inputs.ps5 : cheat.inputs.xbox).map((b) => buttonNames[b]);
   return (
-    <div className="flex flex-col gap-3 rounded-card bg-card p-5 md:p-8">
-      <h2 className="card-title">{platformLabels[platform]}</h2>
+    <div className="panel flex flex-col gap-3 p-4 md:p-6">
+      <h2 className="eyebrow text-muted">{platformLabels[platform]}</h2>
       {verified ? (
         <>
           {platform === "ps5" ? (
@@ -62,7 +66,10 @@ function PlatformCombo({ cheat, platform }: { cheat: Cheat; platform: Platform }
           </div>
         </>
       ) : (
-        <p className="font-mono text-[15px] text-muted">Combo not verified yet</p>
+        <p className="flex min-h-11 items-center gap-2 font-mono text-[14px] text-faint">
+          <span aria-hidden="true" className="h-px w-6 bg-line-strong" />
+          Combo not verified yet
+        </p>
       )}
     </div>
   );
@@ -87,15 +94,17 @@ export default async function CheatPage({ params }: Props) {
       <Breadcrumbs items={crumbs} />
       <header className="mb-8 max-w-2xl">
         <div className="mb-3 flex flex-wrap items-center gap-3">
+          <span className="font-mono text-[11px] tracking-[0.12em] uppercase" style={{ color: categoryAccents[cheat.category] }}>
+            {cheat.category} cheat
+          </span>
           <StatusBadge status={cheat.status} />
-          <span className="text-muted">{cheat.category}</span>
         </div>
         <h1 className="page-title">{cheat.title}</h1>
-        <p className="mt-3 text-[17px] text-muted">{cheat.description}</p>
-        <p className="mt-3 text-[15px] text-muted">Last checked {formatDate(cheat.lastVerified)}</p>
+        <p className="mt-3 text-[16px] text-muted md:text-[17px]">{cheat.description}</p>
+        <p className="meta mt-3">Last checked {formatDate(cheat.lastVerified)}</p>
       </header>
 
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid max-w-5xl grid-cols-1 gap-3 md:grid-cols-2 md:gap-4">
         <PlatformCombo cheat={cheat} platform="ps5" />
         <PlatformCombo cheat={cheat} platform="xbox" />
       </div>
@@ -125,7 +134,7 @@ export default async function CheatPage({ params }: Props) {
           </p>
         ) : (
           <p className="text-muted">
-            Not yet. No button combo for {cheat.title} in {GAME_NAME} has been verified on PS5 or Xbox Series X|S, so
+            Not verified yet, updating at launch. No button combo for {cheat.title} in {GAME_NAME} has been verified on PS5 or Xbox Series X|S, so
             none is shown. This page will show it once it is confirmed in-game or by an official Rockstar source.
           </p>
         )}
@@ -141,7 +150,8 @@ export default async function CheatPage({ params }: Props) {
               <li key={item.id}>
                 <Link
                   href={`/cheats/${item.slug}`}
-                  className="flex min-h-14 items-center justify-between gap-3 rounded-2xl bg-card px-5 transition-colors duration-150 hover:bg-card-hover"
+                  className="stripe-row flex min-h-14 items-center justify-between gap-3 px-4 pl-5"
+                  style={{ "--stripe": categoryAccents[item.category] } as CSSProperties}
                 >
                   <span className="font-medium">{item.title}</span>
                   <StatusBadge status={item.status} />

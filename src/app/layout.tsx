@@ -1,20 +1,27 @@
 import type { Metadata, Viewport } from "next";
-import { Figtree, JetBrains_Mono } from "next/font/google";
+import { Bebas_Neue, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import { Analytics } from "@/components/Analytics";
 import { BottomNav } from "@/components/BottomNav";
-import { ConsentPlaceholder } from "@/components/ConsentPlaceholder";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
 import { SubmitDiscovery } from "@/components/submit/SubmitDiscovery";
 import { SubmitFab } from "@/components/submit/SubmitFab";
+import { googleSiteVerification } from "@/config/monetization";
 import { siteConfig } from "@/config/site";
 import "./globals.css";
 
-const figtree = Figtree({
+const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  variable: "--font-figtree",
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-space-grotesk",
+  display: "swap",
+});
+
+const bebasNeue = Bebas_Neue({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-bebas-neue",
   display: "swap",
 });
 
@@ -28,7 +35,7 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: `${siteConfig.name}: Unofficial Leonida Cheats, Radio and Map Guide`,
+    default: `${siteConfig.name}: Unofficial GTA 6 Cheats, Radio and Map Guide`,
     template: `%s · ${siteConfig.name}`,
   },
   description: siteConfig.description,
@@ -50,10 +57,11 @@ export const metadata: Metadata = {
     images: ["/opengraph-image"],
   },
   formatDetection: { telephone: false },
+  verification: googleSiteVerification ? { google: googleSiteVerification } : undefined,
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0B0A1C",
+  themeColor: "#08080D",
   colorScheme: "dark",
   width: "device-width",
   initialScale: 1,
@@ -62,23 +70,22 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${figtree.variable} ${jetbrainsMono.variable}`}>
+    <html lang="en" className={`${spaceGrotesk.variable} ${bebasNeue.variable} ${jetbrainsMono.variable}`}>
       <body className="flex min-h-dvh flex-col antialiased">
         <a
           href="#main"
-          className="sr-only z-50 rounded-full bg-accent px-4 py-2 font-semibold text-on-accent focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
+          className="sr-only z-50 rounded-md bg-accent px-4 py-2 font-semibold text-on-accent focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
         >
           Skip to content
         </a>
         <Header />
-        <main id="main" className="mx-auto w-full max-w-[1100px] flex-1 px-5 pt-6 md:px-8 md:pt-10">
+        <main id="main" className="w-full flex-1 px-[var(--gutter)] pt-[var(--main-pt)]">
           {children}
         </main>
         <Footer />
         <SubmitFab />
         <BottomNav />
         <SubmitDiscovery />
-        <ConsentPlaceholder />
         <ServiceWorkerRegister />
         <Analytics />
       </body>

@@ -14,15 +14,15 @@ export const metadata: Metadata = pageMetadata({
 export default function AboutPage() {
   return (
     <div className="max-w-2xl">
-      <PageIntro title="About">
+      <PageIntro title="About" eyebrow="Fan-made · Unofficial">
         <p>
           {siteConfig.name} is a fan-made companion for quick lookups while you play: cheats, radio songs, the map
           and more. It is built for phones and dim rooms.
         </p>
       </PageIntro>
 
-      <section aria-labelledby="disclaimer-title" className="mb-10 rounded-card bg-card p-5 md:p-8">
-        <h2 id="disclaimer-title" className="card-title mb-2">
+      <section aria-labelledby="disclaimer-title" className="panel mb-10 p-5 md:p-6">
+        <h2 id="disclaimer-title" className="eyebrow mb-3">
           Fan Site Disclaimer
         </h2>
         <p className="text-muted">{siteConfig.disclaimer}</p>
@@ -37,15 +37,15 @@ export default function AboutPage() {
           How We Label Entries
         </h2>
         <ul className="flex flex-col gap-3">
-          <li className="flex flex-col gap-2 rounded-2xl bg-card p-5">
+          <li className="panel flex flex-col gap-2 p-4">
             <StatusBadge status="confirmed" className="self-start" />
             <p className="text-muted">Verified in-game or from an official Rockstar source.</p>
           </li>
-          <li className="flex flex-col gap-2 rounded-2xl bg-card p-5">
+          <li className="panel flex flex-col gap-2 p-4">
             <StatusBadge status="testing" className="self-start" />
             <p className="text-muted">Reported or expected, but not yet verified. Treat it as unconfirmed.</p>
           </li>
-          <li className="flex flex-col gap-2 rounded-2xl bg-card p-5">
+          <li className="panel flex flex-col gap-2 p-4">
             <StatusBadge status="sample" className="self-start" />
             <p className="text-muted">Example content that shows how a feature works. Not real game data.</p>
           </li>

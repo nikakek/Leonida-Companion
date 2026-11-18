@@ -102,7 +102,7 @@ export function ControllerBadge(props: ControllerBadgeProps) {
               fill={xboxFace[props.button]?.letter ?? "#FFFFFF"}
               fontSize="16"
               fontWeight="600"
-              fontFamily="var(--font-figtree), ui-sans-serif, system-ui, sans-serif"
+              fontFamily="var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif"
             >
               {name}
             </text>

@@ -85,7 +85,7 @@ export function PinDrawer({ pin, found, onToggleFound, onClose }: PinDrawerProps
     <dialog
       ref={dialogRef}
       aria-labelledby="pin-drawer-title"
-      className="dialog-sheet dialog-panel backdrop:bg-transparent"
+      className="dialog-sheet dialog-panel"
       onClick={(event) => {
         if (event.target === event.currentTarget) dialogRef.current?.close();
       }}
@@ -93,61 +93,85 @@ export function PinDrawer({ pin, found, onToggleFound, onClose }: PinDrawerProps
       {pin && category && region ? (
         <div className="flex min-h-full flex-col">
           <div
-            className="flex cursor-grab touch-none justify-center pt-3 pb-1 md:hidden"
+            className="flex cursor-grab touch-none justify-center pt-3 pb-2 md:hidden"
             onPointerDown={onPointerDown}
             onPointerMove={onPointerMove}
             onPointerUp={onPointerEnd}
             onPointerCancel={onPointerEnd}
             aria-hidden="true"
           >
-            <span className="h-1.5 w-10 rounded-full bg-line-strong" />
+            <span className="sheet-handle" />
           </div>
-          <div className="flex flex-col gap-5 p-5 pb-[calc(1.5rem+env(safe-area-inset-bottom))] md:p-8">
-            <div className="flex items-start justify-between gap-4">
-              <h2 id="pin-drawer-title" className="card-title">
-                {pin.title}
-              </h2>
+          <span aria-hidden="true" className="mx-5 h-[2px] rounded-full md:mx-0" style={{ backgroundColor: region.color }} />
+          <div className="flex flex-col gap-5 p-5 pb-[calc(1.5rem+env(safe-area-inset-bottom))] md:p-7">
+            <div className="flex items-start gap-3.5">
+              <span
+                aria-hidden="true"
+                className="flex size-12 shrink-0 items-center justify-center rounded-md border"
+                style={{ borderColor: `${category.color}66`, backgroundColor: `${category.color}14` }}
+              >
+                <PinGlyph category={pin.category} color={category.color} size={24} />
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="font-mono text-[11px] tracking-[0.12em] uppercase" style={{ color: category.color }}>
+                  {category.name}
+                </p>
+                <h2 id="pin-drawer-title" className="display mt-1 text-[32px] leading-[0.95]">
+                  {pin.title}
+                </h2>
+              </div>
               <button
                 type="button"
                 aria-label="Close"
                 onClick={() => dialogRef.current?.close()}
-                className="-mt-2 -mr-2 flex size-11 shrink-0 items-center justify-center rounded-full text-muted transition-colors duration-150 hover:text-fg"
+                className="icon-btn -mt-1 -mr-1"
               >
-                <CloseIcon size={22} />
+                <CloseIcon size={20} />
               </button>
             </div>
 
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[15px]">
-              <span className="flex items-center gap-2">
-                <span aria-hidden="true" className="size-2.5 rounded-full" style={{ backgroundColor: region.color }} />
-                {region.name}
-              </span>
-              <span className="flex items-center gap-2">
-                <PinGlyph category={pin.category} color={category.color} />
-                {category.name}
-              </span>
-              <StatusBadge status={pin.status} />
-            </div>
+            <dl className="grid grid-cols-2 overflow-hidden rounded-md border border-line text-[14px]">
+              <div className="border-r border-line p-3">
+                <dt className="font-mono text-[10px] tracking-[0.14em] text-faint uppercase">Region</dt>
+                <dd className="mt-1 flex items-center gap-2 font-medium">
+                  <span aria-hidden="true" className="size-2 rounded-full" style={{ backgroundColor: region.color }} />
+                  {region.name}
+                </dd>
+              </div>
+              <div className="p-3">
+                <dt className="font-mono text-[10px] tracking-[0.14em] text-faint uppercase">Status</dt>
+                <dd className="mt-1.5">
+                  <StatusBadge status={pin.status} />
+                </dd>
+              </div>
+            </dl>
 
             {pin.status !== "confirmed" ? (
-              <p className="rounded-2xl border border-dashed border-sample/60 p-4 text-[15px] text-sample">
+              <p className="rounded-md border border-dashed border-sample/50 px-3.5 py-3 text-[14px] text-sample">
                 Sample pin: location unverified at launch.
               </p>
             ) : null}
 
-            <p className="text-muted">{pin.description}</p>
+            <p className="text-[15px] text-muted">{pin.description}</p>
 
-            <label className="flex min-h-12 cursor-pointer items-center gap-3 rounded-2xl bg-bg px-4 py-3 font-medium">
-              <input
-                type="checkbox"
-                checked={found}
-                onChange={() => onToggleFound(pin)}
-                className="size-5 shrink-0 accent-[#FF9CCB]"
-              />
-              Mark as Found
+            <label
+              className={`flex min-h-14 cursor-pointer items-center justify-between gap-3 rounded-md border px-4 py-3 font-semibold transition-colors duration-150 has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-accent ${
+                found ? "border-ok/50 bg-ok/10" : "border-line-strong bg-[#0b0b12]"
+              }`}
+            >
+              <span>{found ? "Found" : "Mark as Found"}</span>
+              <input type="checkbox" checked={found} onChange={() => onToggleFound(pin)} className="peer sr-only" />
+              <span
+                aria-hidden="true"
+                className={`relative h-6 w-11 shrink-0 rounded-full transition-colors duration-150 ${found ? "bg-ok" : "bg-line-strong"}`}
+              >
+                <span
+                  className={`absolute top-0.5 left-0.5 size-5 rounded-full bg-fg transition-transform duration-150 ${found ? "translate-x-5" : ""}`}
+                />
+              </span>
             </label>
 
-            <p className="text-[14px] text-muted">Last checked {formatDate(pin.lastVerified)}</p>
+            <p className="meta">Last checked {formatDate(pin.lastVerified)}</p>
           </div>
         </div>
       ) : null}

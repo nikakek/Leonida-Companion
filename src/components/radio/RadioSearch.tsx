@@ -32,8 +32,8 @@ export function RadioSearch() {
 
   return (
     <section aria-labelledby="find-song-title" className="mb-12">
-      <h2 id="find-song-title" className="card-title mb-3">
-        Find a Song
+      <h2 id="find-song-title" className="eyebrow mb-3">
+        Find a song
       </h2>
       <SearchInput
         value={query}
@@ -41,22 +41,24 @@ export function RadioSearch() {
         label="Search songs, artists, hosts or stations"
         placeholder="Song, artist, host or station"
         controls={RESULTS_ID}
+        size="lg"
+        shortcut
       />
       <div id={RESULTS_ID} aria-live="polite" className="mt-4">
         {active ? (
           stationHits.length === 0 && trackHits.length === 0 ? (
-            <p className="rounded-2xl bg-card p-5 text-muted">
+            <p className="rounded-card border border-dashed border-line-strong p-5 text-muted">
               No matches in the preview sample. The full playlists are not listed yet.
             </p>
           ) : (
             <div className="flex flex-col gap-6">
               {stationHits.length > 0 ? (
                 <div>
-                  <h3 className="mb-2 text-[15px] font-medium text-muted">Stations</h3>
+                  <h3 className="eyebrow mb-2 text-faint">Stations</h3>
                   <ul className="flex flex-wrap gap-2">
                     {stationHits.map((station) => (
                       <li key={station.slug}>
-                        <Link href={`/radio/${station.slug}`} className="chip gap-2">
+                        <Link href={`/radio/${station.slug}`} className="chip gap-2 text-fg">
                           <span aria-hidden="true" className="size-2 rounded-full" style={{ backgroundColor: station.accent }} />
                           {station.name}
                         </Link>
@@ -67,7 +69,7 @@ export function RadioSearch() {
               ) : null}
               {trackHits.length > 0 ? (
                 <div>
-                  <h3 className="mb-2 text-[15px] font-medium text-muted">Songs</h3>
+                  <h3 className="eyebrow mb-2 text-faint">Songs</h3>
                   <ul className="flex flex-col gap-2">
                     {trackHits.map(({ station, track }) => (
                       <li key={`${station.slug}-${track.artist}-${track.title}`}>

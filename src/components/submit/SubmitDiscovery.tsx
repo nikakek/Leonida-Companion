@@ -131,7 +131,7 @@ export function SubmitDiscovery() {
 
   const fieldError = (field: SubmissionField) =>
     errors[field] ? (
-      <p id={`${formId}-${field}-error`} className="mt-1.5 text-[14px] text-[#FF8A9B]">
+      <p id={`${formId}-${field}-error`} className="mt-1.5 text-[14px] text-danger">
         {errors[field]}
       </p>
     ) : null;
@@ -141,18 +141,22 @@ export function SubmitDiscovery() {
       <dialog
         ref={dialogRef}
         aria-labelledby={`${formId}-heading`}
-        className="dialog-sheet dialog-modal backdrop:bg-transparent"
+        className="dialog-sheet dialog-modal"
         onClick={(event) => {
           if (event.target === event.currentTarget) dialogRef.current?.close();
         }}
       >
-        <div className="p-5 pb-[calc(1.25rem+env(safe-area-inset-bottom))] md:p-8">
+        <div className="flex justify-center pt-3 md:hidden" aria-hidden="true">
+          <span className="sheet-handle" />
+        </div>
+        <div className="p-5 pb-[calc(1.25rem+env(safe-area-inset-bottom))] md:p-7">
           <div className="mb-5 flex items-start justify-between gap-4">
             <div>
-              <h2 id={`${formId}-heading`} className="card-title">
+              <p className="eyebrow mb-2">Community intel</p>
+              <h2 id={`${formId}-heading`} className="section-title">
                 Submit a Discovery
               </h2>
-              <p className="mt-1 text-[15px] text-muted">
+              <p className="mt-2 text-[14px] text-muted">
                 Found something? Tell us. Every submission is reviewed by hand before anything is published.
               </p>
             </div>
@@ -160,16 +164,16 @@ export function SubmitDiscovery() {
               type="button"
               aria-label="Close"
               onClick={() => dialogRef.current?.close()}
-              className="-mt-1 -mr-2 flex size-11 shrink-0 items-center justify-center rounded-full text-muted transition-colors duration-150 hover:text-fg"
+              className="icon-btn -mt-1 -mr-1"
             >
-              <CloseIcon size={22} />
+              <CloseIcon size={20} />
             </button>
           </div>
 
           <form noValidate onSubmit={onSubmit} className="flex flex-col gap-4">
             <div>
-              <label htmlFor={`${formId}-title`} className="mb-1.5 flex justify-between text-[15px] font-medium">
-                Title <span className="font-normal text-muted">{values.title.length}/{SUBMISSION_LIMITS.title}</span>
+              <label htmlFor={`${formId}-title`} className="field-label">
+                Title <span className="tracking-normal text-faint normal-case">{values.title.length}/{SUBMISSION_LIMITS.title}</span>
               </label>
               <input
                 {...fieldProps("title")}
@@ -187,7 +191,7 @@ export function SubmitDiscovery() {
 
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
-                <label htmlFor={`${formId}-region`} className="mb-1.5 block text-[15px] font-medium">
+                <label htmlFor={`${formId}-region`} className="field-label">
                   Region
                 </label>
                 <select
@@ -209,7 +213,7 @@ export function SubmitDiscovery() {
                 {fieldError("region")}
               </div>
               <div>
-                <label htmlFor={`${formId}-category`} className="mb-1.5 block text-[15px] font-medium">
+                <label htmlFor={`${formId}-category`} className="field-label">
                   Category
                 </label>
                 <select
@@ -233,9 +237,9 @@ export function SubmitDiscovery() {
             </div>
 
             <div>
-              <label htmlFor={`${formId}-description`} className="mb-1.5 flex justify-between text-[15px] font-medium">
+              <label htmlFor={`${formId}-description`} className="field-label">
                 Description
-                <span className="font-normal text-muted">
+                <span className="tracking-normal text-faint normal-case">
                   {values.description.length}/{SUBMISSION_LIMITS.description}
                 </span>
               </label>
@@ -253,8 +257,8 @@ export function SubmitDiscovery() {
             </div>
 
             <div>
-              <label htmlFor={`${formId}-contact`} className="mb-1.5 block text-[15px] font-medium">
-                Contact <span className="font-normal text-muted">(optional)</span>
+              <label htmlFor={`${formId}-contact`} className="field-label">
+                Contact <span className="tracking-normal text-faint normal-case">(optional)</span>
               </label>
               <input
                 {...fieldProps("contact")}
@@ -283,7 +287,7 @@ export function SubmitDiscovery() {
               />
             </div>
 
-            <p role="alert" className="min-h-0 text-[15px] text-[#FF8A9B] empty:hidden">
+            <p role="alert" className="rounded-md border border-danger/40 bg-danger/10 px-3 py-2.5 text-[14px] text-danger empty:hidden">
               {formError}
             </p>
 
@@ -305,7 +309,11 @@ export function SubmitDiscovery() {
         className="pointer-events-none fixed inset-x-0 top-[calc(var(--header-h)+env(safe-area-inset-top)+12px)] z-50 flex justify-center px-4"
       >
         {toast ? (
-          <p className="pointer-events-auto rounded-full bg-ok px-5 py-3 text-[15px] font-semibold text-on-accent">
+          <p className="pointer-events-auto flex items-center gap-2.5 rounded-md border border-ok/50 bg-[#0f1a15] px-4 py-3 text-[14px] font-medium text-fg shadow-[0_0_24px_-8px_rgba(61,220,132,0.6)]">
+            <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true" focusable="false">
+              <circle cx="9" cy="9" r="8" fill="#3DDC84" />
+              <path d="m5.5 9.2 2.2 2.2 4.6-4.8" fill="none" stroke="#08080D" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
             {toast}
           </p>
         ) : null}

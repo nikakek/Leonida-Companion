@@ -14,12 +14,15 @@ export function FavoriteButton({ title, active, onToggle }: FavoriteButtonProps)
       type="button"
       aria-pressed={active}
       aria-label={active ? `Remove ${title} from favorites` : `Add ${title} to favorites`}
+      data-tooltip={active ? "Unstar" : "Star"}
       onClick={onToggle}
-      className={`flex size-12 items-center justify-center rounded-full bg-bg/70 backdrop-blur-sm transition-colors duration-150 ${
-        active ? "text-accent" : "text-fg hover:text-accent"
+      className={`icon-btn ${
+        active
+          ? "border-accent/50 bg-accent/10 text-accent shadow-[0_0_16px_-6px_rgba(255,77,157,0.7)] hover:text-accent"
+          : "hover:text-accent"
       }`}
     >
-      <StarIcon filled={active} />
+      <StarIcon filled={active} size={20} />
     </button>
   );
 }
