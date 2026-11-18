@@ -47,6 +47,13 @@ export default function PrivacyPage() {
           designed not to use cookies or collect personal data, and report only aggregate statistics such as page
           views, referrers, country and device type.
         </p>
+        <p className="mt-2">
+          We also count page views ourselves, as hourly totals only. For each page view we add one to counters for the
+          page, the country (worked out by our hosting provider; we never see or store your IP address for this), the
+          type of device (mobile, tablet or desktop) and, on the first page of a visit, the referring site&apos;s domain.
+          Nothing identifies you or links one page view to another, and the hourly totals are deleted after 8 days. If
+          your browser sends Global Privacy Control or Do Not Track, you are not counted.
+        </p>
       </section>
 
       <section>

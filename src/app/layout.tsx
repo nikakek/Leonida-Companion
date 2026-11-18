@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Bebas_Neue, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import { Analytics } from "@/components/Analytics";
+import { VisitBeacon } from "@/components/VisitBeacon";
 import { BottomNav } from "@/components/BottomNav";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
@@ -88,6 +89,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <SubmitDiscovery />
         <ServiceWorkerRegister />
         <Analytics />
+        <VisitBeacon />
       </body>
     </html>
   );

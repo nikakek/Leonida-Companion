@@ -1,4 +1,5 @@
 import { createHash } from "node:crypto";
+import { upstashConfig, upstashPipeline, type UpstashConfig } from "@/lib/upstash";
 
 /**
  * Fixed-window rate limit for /api/submit.
@@ -21,8 +22,6 @@ interface RateLimitOptions {
   windowSeconds: number;
 }
 
-const UPSTASH_TIMEOUT_MS = 2000;
-
 const hits = new Map<string, number[]>();
 
 function memoryLimit(key: string, { limit, windowSeconds }: RateLimitOptions, now: number): RateLimitResult {
@@ -43,42 +42,22 @@ function memoryLimit(key: string, { limit, windowSeconds }: RateLimitOptions, no
   return { limited: false, retryAfterSeconds: 0, backend: "memory" };
 }
 
-function upstashConfig(): { url: string; token: string } | undefined {
-  const url = process.env.UPSTASH_REDIS_REST_URL?.trim().replace(/\/+$/, "");
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN?.trim();
-  return url && token ? { url, token } : undefined;
-}
-
 /** INCR + EXPIRE NX + TTL in one round trip. Returns undefined on any failure so the caller can fall back. */
 async function upstashLimit(
-  config: { url: string; token: string },
+  config: UpstashConfig,
   key: string,
   { limit, windowSeconds }: RateLimitOptions,
 ): Promise<RateLimitResult | undefined> {
-  try {
-    const response = await fetch(`${config.url}/pipeline`, {
-      method: "POST",
-      headers: { Authorization: `Bearer ${config.token}`, "Content-Type": "application/json" },
-      body: JSON.stringify([
-        ["INCR", key],
-        ["EXPIRE", key, String(windowSeconds), "NX"],
-        ["TTL", key],
-      ]),
-      signal: AbortSignal.timeout(UPSTASH_TIMEOUT_MS),
-      cache: "no-store",
-    });
-    if (!response.ok) return undefined;
-    const data: unknown = await response.json();
-    if (!Array.isArray(data)) return undefined;
-    const [count, , ttl] = data.map((entry: unknown) =>
-      typeof entry === "object" && entry !== null && "result" in entry ? (entry as { result: unknown }).result : undefined,
-    );
-    if (typeof count !== "number") return undefined;
-    const retryAfterSeconds = typeof ttl === "number" && ttl > 0 ? ttl : windowSeconds;
-    return { limited: count > limit, retryAfterSeconds: count > limit ? retryAfterSeconds : 0, backend: "upstash" };
-  } catch {
-    return undefined;
-  }
+  const results = await upstashPipeline(config, [
+    ["INCR", key],
+    ["EXPIRE", key, windowSeconds, "NX"],
+    ["TTL", key],
+  ]);
+  if (!results) return undefined;
+  const [count, , ttl] = results;
+  if (typeof count !== "number") return undefined;
+  const retryAfterSeconds = typeof ttl === "number" && ttl > 0 ? ttl : windowSeconds;
+  return { limited: count > limit, retryAfterSeconds: count > limit ? retryAfterSeconds : 0, backend: "upstash" };
 }
 
 export async function rateLimit(ip: string, options: RateLimitOptions, now = Date.now()): Promise<RateLimitResult> {

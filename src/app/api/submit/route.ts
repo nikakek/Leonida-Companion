@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { rateLimit } from "@/lib/rateLimit";
+import { isSameOrigin } from "@/lib/sameOrigin";
 import { validateSubmission, type Submission } from "@/lib/submission";
 import { webhookBody, webhookKind, type SubmissionRecord } from "@/lib/webhook";
 
@@ -21,19 +22,6 @@ function clientIp(request: NextRequest): string {
   const forwarded = request.headers.get("x-forwarded-for");
   const first = forwarded?.split(",")[0]?.trim();
   return first || request.headers.get("x-real-ip") || "unknown";
-}
-
-function isSameOrigin(request: NextRequest): boolean {
-  const host = request.headers.get("x-forwarded-host") ?? request.headers.get("host");
-  const origin = request.headers.get("origin");
-  if (origin) {
-    try {
-      return new URL(origin).host === host;
-    } catch {
-      return false;
-    }
-  }
-  return request.headers.get("sec-fetch-site") === "same-origin";
 }
 
 /** Reads the body with a hard byte cap. Returns null when the cap is exceeded. */

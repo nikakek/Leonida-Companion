@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { PageIntro } from "@/components/PageIntro";
 import { formatDate } from "@/lib/format";
 
-export const LEGAL_UPDATED = "2026-11-17";
+export const LEGAL_UPDATED = "2026-11-18";
 
 /** Readable long-form layout for legal pages. */
 export function LegalPage({ title, intro, children }: { title: string; intro: ReactNode; children: ReactNode }) {

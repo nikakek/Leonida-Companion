@@ -140,3 +140,4 @@ This is a fan site that uses the game's name to describe what it covers. Even wi
 - [ ] Review Take-Two's fan-content policy, then apply for affiliate programs and add the URLs.
 - [ ] Apply for AdSense once real data is live; set `NEXT_PUBLIC_ADSENSE_CLIENT`, then `NEXT_PUBLIC_ADSENSE_SLOT`, and enable the consent message.
 - [ ] Optionally enable Plausible or Umami analytics.
+- [ ] Telegram digest: set `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` (and optionally `DIGEST_TIMEZONE`) in Netlify, redeploy, then test via Logs → Functions → visit-digest → Run now.
