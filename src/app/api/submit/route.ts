@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { rateLimit } from "@/lib/rateLimit";
 import { validateSubmission, type Submission } from "@/lib/submission";
+import { webhookBody, webhookKind, type SubmissionRecord } from "@/lib/webhook";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -57,8 +58,8 @@ async function readBodyCapped(request: NextRequest): Promise<string | null> {
 }
 
 async function forward(submission: Submission): Promise<boolean> {
-  const webhookUrl = process.env.SUBMISSION_WEBHOOK_URL;
-  const record = { ...submission, status: "pending_review", receivedAt: new Date().toISOString() };
+  const webhookUrl = process.env.SUBMISSION_WEBHOOK_URL?.trim();
+  const record: SubmissionRecord = { ...submission, status: "pending_review", receivedAt: new Date().toISOString() };
 
   if (!webhookUrl) {
     // Contact details are deliberately not logged.
@@ -73,11 +74,17 @@ async function forward(submission: Submission): Promise<boolean> {
     const response = await fetch(webhookUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(record),
+      body: webhookBody(webhookUrl, record),
       signal: AbortSignal.timeout(WEBHOOK_TIMEOUT_MS),
     });
+    if (!response.ok) {
+      // Status and webhook type only: no URL (it is a secret) and no submission content.
+      console.error(`[submit] webhook rejected the request: HTTP ${response.status} (${webhookKind(webhookUrl)})`);
+    }
     return response.ok;
-  } catch {
+  } catch (error) {
+    const reason = error instanceof Error ? error.name : "unknown error";
+    console.error(`[submit] webhook request failed: ${reason} (${webhookKind(webhookUrl)})`);
     return false;
   }
 }
