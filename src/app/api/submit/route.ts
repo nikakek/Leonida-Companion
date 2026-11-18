@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { rateLimit } from "@/lib/rateLimit";
 import { validateSubmission, type Submission } from "@/lib/submission";
 
 export const runtime = "nodejs";
@@ -8,14 +9,8 @@ export const dynamic = "force-dynamic";
 
 const MAX_BODY_BYTES = 8 * 1024;
 const RATE_LIMIT = 5;
-const RATE_WINDOW_MS = 10 * 60 * 1000;
+const RATE_WINDOW_SECONDS = 10 * 60;
 const WEBHOOK_TIMEOUT_MS = 5000;
-
-/**
- * In-memory, per-instance rate limit. On serverless platforms each instance has its own memory
- * and instances are recycled, so this is best-effort only. Use Redis / Upstash for a real limit.
- */
-const hits = new Map<string, number[]>();
 
 function json(body: Record<string, unknown>, status: number, headers?: HeadersInit) {
   return NextResponse.json(body, { status, headers: { "Cache-Control": "no-store", ...headers } });
@@ -25,23 +20,6 @@ function clientIp(request: NextRequest): string {
   const forwarded = request.headers.get("x-forwarded-for");
   const first = forwarded?.split(",")[0]?.trim();
   return first || request.headers.get("x-real-ip") || "unknown";
-}
-
-function checkRateLimit(ip: string, now: number): { limited: boolean; retryAfterSeconds: number } {
-  const recent = (hits.get(ip) ?? []).filter((time) => now - time < RATE_WINDOW_MS);
-  if (recent.length >= RATE_LIMIT) {
-    hits.set(ip, recent);
-    return { limited: true, retryAfterSeconds: Math.ceil((recent[0] + RATE_WINDOW_MS - now) / 1000) };
-  }
-  recent.push(now);
-  hits.set(ip, recent);
-  // Keep memory bounded: drop stale keys occasionally.
-  if (hits.size > 5000) {
-    for (const [key, times] of hits) {
-      if (times.every((time) => now - time >= RATE_WINDOW_MS)) hits.delete(key);
-    }
-  }
-  return { limited: false, retryAfterSeconds: 0 };
 }
 
 function isSameOrigin(request: NextRequest): boolean {
@@ -82,8 +60,6 @@ async function forward(submission: Submission): Promise<boolean> {
   const webhookUrl = process.env.SUBMISSION_WEBHOOK_URL;
   const record = { ...submission, status: "pending_review", receivedAt: new Date().toISOString() };
 
-  // TODO: Supabase insert, e.g. `await supabase.from("submissions").insert(record)`, still pending review.
-
   if (!webhookUrl) {
     // Contact details are deliberately not logged.
     console.info("[submit] received (no SUBMISSION_WEBHOOK_URL set):", {
@@ -111,7 +87,11 @@ export async function POST(request: NextRequest) {
     return json({ ok: false, error: "Cross-origin requests are not allowed." }, 403);
   }
 
-  const { limited, retryAfterSeconds } = checkRateLimit(clientIp(request), Date.now());
+  const { limited, retryAfterSeconds } = await rateLimit(clientIp(request), {
+    name: "submit",
+    limit: RATE_LIMIT,
+    windowSeconds: RATE_WINDOW_SECONDS,
+  });
   if (limited) {
     return json(
       { ok: false, error: "Too many submissions. Please try again later." },
